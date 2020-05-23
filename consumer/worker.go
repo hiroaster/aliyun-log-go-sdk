@@ -1,7 +1,7 @@
 package consumerLibrary
 
 import (
-	"github.com/aliyun/aliyun-log-go-sdk"
+	"github.com/hiroaster/aliyun-log-go-sdk"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	lumberjack "gopkg.in/natefinch/lumberjack.v2"
@@ -15,12 +15,12 @@ type ConsumerWorker struct {
 	client             *ConsumerClient
 	workerShutDownFlag bool
 	shardConsumer      map[int]*ShardConsumerWorker
-	do                 func(shard int, logGroup *sls.LogGroupList) string
+	do                 func(shard int, logGroup *sls.LogGroupList, option LogHubConfig) string
 	waitGroup          sync.WaitGroup
 	Logger             log.Logger
 }
 
-func InitConsumerWorker(option LogHubConfig, do func(int, *sls.LogGroupList) string) *ConsumerWorker {
+func InitConsumerWorker(option LogHubConfig, do func(int, *sls.LogGroupList,LogHubConfig) string) *ConsumerWorker {
 	logger := logConfig(option)
 	consumerClient := initConsumerClient(option, logger)
 	consumerHeatBeat := initConsumerHeatBeat(consumerClient, logger)

@@ -1,7 +1,7 @@
 package consumerLibrary
 
 import (
-	"github.com/aliyun/aliyun-log-go-sdk"
+	"github.com/hiroaster/aliyun-log-go-sdk"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"sync"
@@ -21,7 +21,7 @@ type ShardConsumerWorker struct {
 	lastFetchGroupCount           int
 	lastFetchtime                 int64
 	consumerStatus                string
-	process                       func(shard int, logGroup *sls.LogGroupList) string
+	process                       func(shard int, logGroup *sls.LogGroupList,option LogHubConfig) string
 	shardId                       int
 	tempCheckPoint                string
 	isCurrentDone                 bool
@@ -43,7 +43,7 @@ func (consumer *ShardConsumerWorker) getConsumerStatus() string {
 	return consumer.consumerStatus
 }
 
-func initShardConsumerWorker(shardId int, consumerClient *ConsumerClient, do func(shard int, logGroup *sls.LogGroupList) string, logger log.Logger) *ShardConsumerWorker {
+func initShardConsumerWorker(shardId int, consumerClient *ConsumerClient, do func(shard int, logGroup *sls.LogGroupList,option LogHubConfig)) string, logger log.Logger) *ShardConsumerWorker {
 	shardConsumeWorker := &ShardConsumerWorker{
 		consumerShutDownFlag:          false,
 		process:                       do,
